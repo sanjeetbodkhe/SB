@@ -1,0 +1,4 @@
+sudo service nginx restart
+sudo service app restart
+sudo systemctl restart nginx
+sudo tail -F /var/log/nginx/error.log

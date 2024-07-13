@@ -1,0 +1,15 @@
+{% extends 'home/layout.html' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block content %}
+<h2>Download Historical Data </h2>
+<a href="/download_csv">
+    <button class="button-1">Download CSV for historical Data</button>
+</a>
+<h2>Upload Historical Data </h2>
+<form method = "POST" enctype="multipart/form-data" action = "/uploadFile">    
+    <input type="file" name="file" accept=".csv">
+    <input type="submit" class="upload1" value="Upload">  
+</form>
+{% endblock %}
