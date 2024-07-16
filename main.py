@@ -58,7 +58,7 @@ def model_train():
             day2=int(60)
         np.random.seed(42)
         #tf.random.set_seed(42)
-        os.chdir(r'C:\Users\Home\Desktop\SBSCAFFORM\static\uploads')
+        os.chdir(fr"{os.getenv('BASE_DIR')}\static\uploads")
         data = pd.read_csv('aluminium_mini_historical_data.csv',index_col=[0])
         data = data.iloc[::-1]
         #data.index = pd.to_datetime(data.index)
@@ -139,7 +139,7 @@ def model_train():
         print('Mean Squared Error:', mse)
         print('Root Mean Squared Error:', rmse)
         print('R-squared:', r2)
-        os.chdir(r'C:\Users\Home\Desktop\SBSCAFFORM')
+        os.chdir(fr"{os.getenv('BASE_DIR')}")
         # save the model to disk
         filename = 'finalized_model'+str(day1)+'.sav'
         pickle.dump(regressor, open(filename, 'wb'))
@@ -184,10 +184,10 @@ def logout():
 def home():
     # Check if user is loggedin
     if 'loggedin' in session:
-        os.chdir(r'C:\Users\Home\Desktop\SBSCAFFORM')
+        os.chdir(fr"{os.getenv('BASE_DIR')}")
         if os.path.exists("finalized_model5.sav"):
             np.random.seed(42)
-            os.chdir(r'C:\Users\Home\Desktop\SBSCAFFORM\static\uploads')
+            os.chdir(fr"{os.getenv('BASE_DIR')}\static\uploads")
             data = pd.read_csv('aluminium_mini_historical_data.csv',index_col=[0])
             data = data.iloc[::-1]
             #data.index = pd.to_datetime(data.index)
@@ -237,7 +237,7 @@ def home():
             print("Number of TimeSteps:", TimeSteps)
             print("Number of Features:", TotalFeatures)
 
-            os.chdir(r'C:\Users\Home\Desktop\SBSCAFFORM')
+            os.chdir(fr"{os.getenv('BASE_DIR')}")
             filename = 'finalized_model5.sav'
             regressor = pickle.load(open(filename, 'rb'))
 
@@ -286,11 +286,11 @@ def getprediction():
     # Check if user is loggedin
     if 'loggedin' in session:
         day1=int(request.form['duration'])
-        os.chdir(r'C:\Users\Home\Desktop\SBSCAFFORM')
+        os.chdir(fr"{os.getenv('BASE_DIR')}")
         if os.path.exists("finalized_model"+str(day1)+".sav"):
             np.random.seed(42)
             #tf.random.set_seed(42)
-            os.chdir(r'C:\Users\Home\Desktop\SBSCAFFORM\static\uploads')
+            os.chdir(fr"{os.getenv('BASE_DIR')}\static\uploads")
             data = pd.read_csv('aluminium_mini_historical_data.csv',index_col=[0])
             print(data.head())
             data = data.iloc[::-1]
@@ -348,7 +348,7 @@ def getprediction():
             print("Number of TimeSteps:", TimeSteps)
             print("Number of Features:", TotalFeatures)
 
-            os.chdir(r'C:\Users\Home\Desktop\SBSCAFFORM')
+            os.chdir(fr"{os.getenv('BASE_DIR')}")
             filename = 'finalized_model'+str(day1)+'.sav'
             regressor = pickle.load(open(filename, 'rb'))
 
@@ -395,17 +395,17 @@ def uploadFile():
         if(data_filename == ''):
             return render_template('home/home.html', username=session['username'],title="Home",pred='',df_len=0,model_status='')
         else:
-            os.chdir(r'C:\Users\Home\Desktop\SBSCAFFORM\static\uploads')
+            os.chdir(fr"{os.getenv('BASE_DIR')}\static\uploads")
             if os.path.exists("aluminium_mini_historical_data.csv"):
                 os.remove("aluminium_mini_historical_data.csv")
-        os.chdir(r'C:\Users\Home\Desktop\SBSCAFFORM') 
+        os.chdir(fr"{os.getenv('BASE_DIR')}") 
         f.save(os.path.join(app.config['UPLOAD_FOLDER'],data_filename))       
  
         session['uploaded_data_file_path'] = os.path.join(app.config['UPLOAD_FOLDER'], data_filename)        
         print("success in uploading")
-        os.chdir(r'C:\Users\Home\Desktop\SBSCAFFORM\static\uploads')
+        os.chdir(fr"{os.getenv('BASE_DIR')}\static\uploads")
         os.rename(data_filename,"aluminium_mini_historical_data.csv")
-        os.chdir(r'C:\Users\Home\Desktop\SBSCAFFORM')
+        os.chdir(fr"{os.getenv('BASE_DIR')}")
         if os.path.exists("finalized_model5.sav"):
             os.remove("finalized_model5.sav")
         if os.path.exists("finalized_model15.sav"):
