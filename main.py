@@ -21,7 +21,7 @@ from datetime import date
 import pickle
 import csv
 import threading
-
+from dotenv import load_dotenv
 
 UPLOAD_FOLDER = os.path.join('static', 'uploads')        
 # Define allowed files
@@ -30,19 +30,22 @@ ALLOWED_EXTENSIONS = {'csv'}
 app = Flask(__name__)
 
 # Change this to your secret key (can be anything, it's for extra protection)
-app.secret_key = '1a2b3c4d5e6d7g8h9i10'
+app.secret_key = os.getenv('SECRET_KEY')
 
 # Enter your database connection details below
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'Akalpit@1' #Replace with  your database password.
-app.config['MYSQL_DB'] = 'loginapp'
+app.config['MYSQL_HOST'] = os.getenv('MYSQL_HOST')
+app.config['MYSQL_USER'] = os.getenv('MYSQL_USER')
+app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD') #Replace with  your database password.
+app.config['MYSQL_DB'] = os.getenv('MYSQL_DB')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-print(UPLOAD_FOLDER)
 
 
 # Intialize MySQL
 mysql = MySQL(app)
+
+
+def configure():
+    load_dotenv()
 
 def model_train():
     days=[5,15,30]
@@ -418,4 +421,5 @@ def uploadFile():
     
 
 if __name__ =='__main__':
+    configure()
     app.run(debug=True)
