@@ -12,4 +12,17 @@
     <input type="file" name="file" accept=".csv">
     <input type="submit" class="upload1" value="Upload">  
 </form>
+{% block tabledata %}
+<table>
+    <tr>
+        <th>Date</th>
+        <th>Predicted Price</th>
+    </tr>
+    {% for x in range(df_len) %}
+    <tr>
+        <td>{{(pred.iloc[x]['Date']).strftime("%d/%m/%y")}}</td>
+        <td>{{pred.iloc[x]['Predicted_Price']}}</td>
+    </tr>
+    {% endfor %}
+</table>
 {% endblock %}
