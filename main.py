@@ -158,7 +158,7 @@ def login():
         password = request.form['password']
         # Check if account exists using MySQL
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM accounts WHERE username = %s AND password = %s', (username, password))
+        cursor.execute(f"SELECT * FROM {os.getenv('MYSQL_DB')}.accounts WHERE username = '{username}' AND password = '{password}'")
         # Fetch one record and return result
         account = cursor.fetchone()
                 # If account exists in accounts table in out database
