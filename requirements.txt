@@ -62,3 +62,4 @@ urllib3==2.2.2
 Werkzeug==3.0.3
 wrapt==1.16.0
 python-dotenv==1.0.1
+bs4==4.12.3

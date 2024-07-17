@@ -12,17 +12,14 @@ import statsmodels.api as sm
 import time
 from datetime import date
 import pickle
+import get_data
 
 def def_model():
     np.random.seed(42)
-    os.chdir(fr"{os.getenv('BASE_DIR')}\static\uploads")
-    data = pd.read_csv('aluminium_mini_historical_data.csv',index_col=[0])
-    data = data.iloc[::-1]
-    #data.index = pd.to_datetime(data.index)
+    data = get_data.fetch_alu_mcx()
     dates = data.index.values
-    data2 = pd.read_csv('aluminium_mini_historical_data.csv')
-    max_date= (dt.datetime.strptime(data2['Date'].max(), "%Y-%m-%d") + dt.timedelta(days=1)).strftime("%Y-%m-%d")
-
+    data2 = get_data.fetch_alu_mcx()
+    max_date= (data2.index.max() + dt.timedelta(days=1)).strftime("%Y-%m-%d")
     FullData=data[['Price']].values
     sc = StandardScaler()
     DataScaler = sc.fit(FullData)
@@ -54,16 +51,16 @@ def def_model():
     y_train=y_data[:-TestingRecords]
     y_test=y_data[-TestingRecords:]
     dates_test = dates_data[-TestingRecords:]
-    print(X_train.shape)
-    print(y_train.shape)
-    print(X_test.shape)
-    print(y_test.shape)
-    print('Dates for X_test:', dates_test)
+    # print(X_train.shape)
+    # print(y_train.shape)
+    # print(X_test.shape)
+    # print(y_test.shape)
+    # print('Dates for X_test:', dates_test)
 
     TimeSteps=X_train.shape[1]
     TotalFeatures=X_train.shape[2]
-    print("Number of TimeSteps:", TimeSteps)
-    print("Number of Features:", TotalFeatures)
+    # print("Number of TimeSteps:", TimeSteps)
+    # print("Number of Features:", TotalFeatures)
 
     os.chdir(fr"{os.getenv('BASE_DIR')}")
     filename = 'finalized_model5.sav'
@@ -73,10 +70,10 @@ def def_model():
     predicted_Price = regressor.predict(X_test)
     predicted_Price = DataScaler.inverse_transform(predicted_Price)
     predicted_df = pd.DataFrame({'Date': dates_test, 'Predicted_Price': predicted_Price[:, 0]})
-    print(predicted_df)
-    print((predicted_df.shape))
-    for x in range(5):
-        print(predicted_df.iloc[x]['Date'])
+    # print(predicted_df)
+    # print((predicted_df.shape))
+    # for x in range(5):
+    #     print(predicted_df.iloc[x]['Date'])
 
     predicted_Price = regressor.predict(X_test)
     predicted_Price = DataScaler.inverse_transform(predicted_Price)
@@ -97,9 +94,8 @@ def model_train():
             day2=int(60)
         np.random.seed(42)
         #tf.random.set_seed(42)
-        os.chdir(fr"{os.getenv('BASE_DIR')}\static\uploads")
-        data = pd.read_csv('aluminium_mini_historical_data.csv',index_col=[0])
-        data = data.iloc[::-1]
+        data = get_data.fetch_alu_mcx()
+        #data = data.iloc[::-1]
         #data.index = pd.to_datetime(data.index)
         dates = data.index.values
 
@@ -134,16 +130,16 @@ def model_train():
         y_train=y_data[:-TestingRecords]
         y_test=y_data[-TestingRecords:]
         dates_test = dates_data[-TestingRecords:]
-        print(X_train.shape)
-        print(y_train.shape)
-        print(X_test.shape)
-        print(y_test.shape)
-        print('Dates for X_test:', dates_test)
+        # print(X_train.shape)
+        # print(y_train.shape)
+        # print(X_test.shape)
+        # print(y_test.shape)
+        # print('Dates for X_test:', dates_test)
 
         TimeSteps=X_train.shape[1]
         TotalFeatures=X_train.shape[2]
-        print("Number of TimeSteps:", TimeSteps)
-        print("Number of Features:", TotalFeatures)
+        # print("Number of TimeSteps:", TimeSteps)
+        # print("Number of Features:", TotalFeatures)
 
         regressor = Sequential() #relu
         regressor.add(LSTM(units = 10, activation = 'relu', input_shape = (TimeSteps, TotalFeatures), return_sequences=True))
@@ -160,7 +156,7 @@ def model_train():
         predicted_Price = regressor.predict(X_test)
         predicted_Price = DataScaler.inverse_transform(predicted_Price)
         predicted_df = pd.DataFrame({'Date': dates_test, 'Predicted_Price': predicted_Price[:, 0]})
-        print(predicted_df)
+        # print(predicted_df)
 
         predicted_Price = regressor.predict(X_test)
         predicted_Price = DataScaler.inverse_transform(predicted_Price)
@@ -187,16 +183,14 @@ def model_train():
 
 def get_prediction(day1):
     np.random.seed(42)
-    #tf.random.set_seed(42)
-    os.chdir(fr"{os.getenv('BASE_DIR')}\static\uploads")
-    data = pd.read_csv('aluminium_mini_historical_data.csv',index_col=[0])
-    print(data.head())
-    data = data.iloc[::-1]
+    data = get_data.fetch_alu_mcx()
+    # print(data.head())
+    #data = data.iloc[::-1]
     #data.index = pd.to_datetime(data.index)
     dates = data.index.values
 
-    data2 = pd.read_csv('aluminium_mini_historical_data.csv')
-    max_date= (dt.datetime.strptime(data2['Date'].max(), "%Y-%m-%d") + dt.timedelta(days=1)).strftime("%Y-%m-%d")
+    data2 = get_data.fetch_alu_mcx()
+    max_date= (data2.index.max() + dt.timedelta(days=1)).strftime("%Y-%m-%d")
     if(day1==5):
         day2=int(10)
     elif(day1==15):
@@ -235,16 +229,16 @@ def get_prediction(day1):
     y_train=y_data[:-TestingRecords]
     y_test=y_data[-TestingRecords:]
     dates_test = dates_data[-TestingRecords:]
-    print(X_train.shape)
-    print(y_train.shape)
-    print(X_test.shape)
-    print(y_test.shape)
-    print('Dates for X_test:', dates_test)
+    # print(X_train.shape)
+    # print(y_train.shape)
+    # print(X_test.shape)
+    # print(y_test.shape)
+    # print('Dates for X_test:', dates_test)
 
     TimeSteps=X_train.shape[1]
     TotalFeatures=X_train.shape[2]
-    print("Number of TimeSteps:", TimeSteps)
-    print("Number of Features:", TotalFeatures)
+    # print("Number of TimeSteps:", TimeSteps)
+    # print("Number of Features:", TotalFeatures)
 
     os.chdir(fr"{os.getenv('BASE_DIR')}")
     filename = 'finalized_model'+str(day1)+'.sav'
@@ -254,7 +248,7 @@ def get_prediction(day1):
     predicted_Price = regressor.predict(X_test)
     predicted_Price = DataScaler.inverse_transform(predicted_Price)
     predicted_df = pd.DataFrame({'Date': dates_test, 'Predicted_Price': predicted_Price[:, 0]})
-    print(predicted_df)
+    # print(predicted_df)
 
     predicted_Price = regressor.predict(X_test)
     predicted_Price = DataScaler.inverse_transform(predicted_Price)

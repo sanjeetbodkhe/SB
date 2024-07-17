@@ -22,7 +22,9 @@ import pickle
 import csv
 import threading
 from dotenv import load_dotenv
-from model import def_model, model_train, get_prediction
+import model
+import get_data
+
 
 UPLOAD_FOLDER = os.path.join('static', 'uploads')        
 # Define allowed files
@@ -87,7 +89,7 @@ def home():
     if 'loggedin' in session:
         os.chdir(fr"{os.getenv('BASE_DIR')}")
         if os.path.exists("finalized_model5.sav"):
-            predicted_df=def_model()
+            predicted_df=model.def_model()
             # User is loggedin show them the home page
             return render_template('home/home.html', username=session['username'],title="Home",pred=predicted_df,df_len=len(predicted_df),model_status='')
         else:
@@ -121,7 +123,7 @@ def getprediction():
         day1=int(request.form['duration'])
         os.chdir(fr"{os.getenv('BASE_DIR')}")
         if os.path.exists("finalized_model"+str(day1)+".sav"):
-            predicted_df=get_prediction(day1)
+            predicted_df=model.get_prediction(day1)
             return render_template('home/home.html', username=session['username'],title="Home",pred=predicted_df,df_len=len(predicted_df),model_status='')        
         else:
             return render_template('home/home.html', username=session['username'],title="Home",pred='',df_len=0,model_status='Model is training!')
@@ -159,12 +161,12 @@ def uploadFile():
         if os.path.exists("finalized_model30.sav"):
             os.remove("finalized_model30.sav")
 
-        threading.Thread(target=model_train).start()
+        threading.Thread(target=model.model_train).start()
         #model_train()      
 
  
         return render_template('home/home.html', username=session['username'],title="Home",pred='',df_len=0,model_status='Model is training!')
-    
+
 
 if __name__ =='__main__':
     configure()
