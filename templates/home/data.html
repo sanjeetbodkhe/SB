@@ -3,10 +3,30 @@
 {% block title %} {{ title }} {% endblock %}
 
 {% block content %}
-<h2>Download Historical Data </h2>
-<a href="/download_csv">
-    <button class="button-1">Download CSV for historical Data</button>
-</a>
+<h2>Add Data </h2>
+<form action="{{ url_for('add')}}" method="post">
+    <label for="date">Date:</label>
+    <input type="date" id="date" name="date">
+    <label for="price">Price:</label>
+    <input type="text" id="price" name="price" placeholder="0.0">
+    <label for="open">Open:</label>
+    <input type="text" id="open" name="open" placeholder="0.0">
+    <label for="high">High:</label>
+    <input type="text" id="high" name="high" placeholder="0.0">
+    <label for="low">Low:</label>
+    <input type="text" id="low" name="low" placeholder="0.0">
+    <label for="vol">Vol:</label>
+    <input type="text" id="vol" name="vol" placeholder="0.0K">
+    <label for="change">Change:</label>
+    <input type="text" id="change" name="change" placeholder="0.0%">
+    <input id="add" class="add "type="submit" value="Add">
+</form>
+<h2>Delete Data </h2>
+<form action="{{ url_for('delete')}}" method="post">
+    <label for="date">Date:</label>
+    <input type="date" id="date" name="date">
+    <input id="delete" class="delete "type="submit" value="Delete">
+</form>
 <h2>Upload Historical Data </h2>
 <form method = "POST" enctype="multipart/form-data" action = "/uploadFile">    
     <input type="file" name="file" accept=".csv">
@@ -25,4 +45,5 @@
     </tr>
     {% endfor %}
 </table>
+{% endblock %}
 {% endblock %}

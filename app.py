@@ -88,6 +88,8 @@ def home():
     # Check if user is loggedin
     if 'loggedin' in session:
         os.chdir(fr"{os.getenv('BASE_DIR')}")
+        print(get_data.fetch_alu_mcx())
+        print(get_data.fetch_alu_mcx2())
         if os.path.exists("finalized_model5.sav"):
             predicted_df=model.def_model()
             # User is loggedin show them the home page
@@ -112,7 +114,7 @@ def data():
     # Check if user is loggedin
     if 'loggedin' in session:
         # User is loggedin show them the home page
-        return render_template('home/data.html', username=session['username'],title="Data")
+        return render_template('home/data.html', username=session['username'],title="Data",pred='',df_len=0,model_status='')
     # User is not loggedin redirect to login page
     return redirect(url_for('data'))
 
@@ -162,10 +164,41 @@ def uploadFile():
             os.remove("finalized_model30.sav")
 
         threading.Thread(target=model.model_train).start()
-        #model_train()      
-
- 
+        #model_train()       
         return render_template('home/home.html', username=session['username'],title="Home",pred='',df_len=0,model_status='Model is training!')
+    
+@app.route('/add', methods =["GET", "POST"])
+def add():
+    if request.method == "POST":
+       date = request.form.get("date")
+       price = request.form.get("price")
+       open = request.form.get("open")
+       high = request.form.get("high")
+       low = request.form.get("low")
+       vol = request.form.get("vol")
+       change = request.form.get("change")
+       cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+       cursor.execute(f"SELECT * FROM {os.getenv('MYSQL_DB')}.data1 WHERE date = '{date}'")
+       data = cursor.fetchone()
+       if data == None:
+           cursor.execute(f"INSERT INTO {os.getenv('MYSQL_DB')}.data1 VALUES('{date}',{price},{open},{high},{low},'{vol}','{change}')")
+       else:
+           cursor.execute((f"UPDATE {os.getenv('MYSQL_DB')}.data1 SET Price = {price} WHERE date='{date}' "))
+           cursor.execute((f"UPDATE {os.getenv('MYSQL_DB')}.data1 SET Open={open} WHERE date='{date}' "))
+           cursor.execute((f"UPDATE {os.getenv('MYSQL_DB')}.data1 SET High={high} WHERE date='{date}' "))
+           cursor.execute((f"UPDATE {os.getenv('MYSQL_DB')}.data1 SET Vol='{vol}' WHERE date='{date}' "))
+           cursor.execute((f"UPDATE {os.getenv('MYSQL_DB')}.data1 SET chng='{change}' WHERE date='{date}' "))
+       mysql.connection.commit()
+    return render_template('home/data.html', username=session['username'],title="Data",pred='',df_len=0,model_status='')
+
+@app.route('/delete', methods =["GET", "POST"])
+def delete():
+    if request.method == "POST":
+       # getting input with name = fname in HTML form
+       date = request.form.get("date")
+       # getting input with name = lname in HTML form
+       print(date) 
+    return render_template('home/data.html', username=session['username'],title="Data",pred='',df_len=0,model_status='')
 
 
 if __name__ =='__main__':

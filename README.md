@@ -16,6 +16,9 @@ pip install -r requirements.txt
 
 Make changes according to .sql file
 
+Nalco Prediction formula:
+Nalco IA10 Aluminium Ingot Price (Rs/ton) ≈ (LME Aluminium Rate (USD/ton) x USD-INR Exchange Rate x 45) + (INR Inflation Rate x 0.8) + (Crude Oil Price (USD/barrel) x 0.4) + 12,500
+
 #To run the app:
 
 venv\Scripts\activate
