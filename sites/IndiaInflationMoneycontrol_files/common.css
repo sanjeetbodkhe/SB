@@ -1,0 +1,42 @@
+.toast-center-center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.displayNone {
+    display: none !important;
+}
+
+.displayBlock {
+    display: block !important;
+}
+
+#Search-Table {
+    margin-bottom: 0;
+}
+
+
+#pagination-loader,
+#filter-loader {
+    display: none;
+    margin: auto;
+}
+a:hover,a:focus,button:focus{outline:0px !important;}
+/* avoid IOS Background scroll on popup*/
+@media not all and (min-resolution:.001dpcm) {
+    @supports (-webkit-appearance:none) {
+        body.modal-open {
+            overflow: hidden;
+            position: fixed;
+            height: 100%;
+            width: 100%;
+            left: 0px;
+            top: 0px;
+        }
+
+        html {
+            height: calc(100vh + 50px);
+        }
+    }
+}
