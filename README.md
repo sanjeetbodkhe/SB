@@ -16,7 +16,15 @@ pip install -r requirements.txt
 
 Make changes according to .sql file
 
-Nalco Prediction formula:
+#Create .env file with parameters like these:
+SECRET_KEY = 1a2b3c4d5e6d7g8h9i10
+MYSQL_HOST =localhost
+MYSQL_USER = root
+MYSQL_PASSWORD=Akalpit@1
+MYSQL_DB = loginapp
+BASE_DIR=C:\Users\Home\Desktop\SBSCAFFORM
+
+#Nalco Prediction formula:
 Nalco IA10 Aluminium Ingot Price (Rs/ton) ≈ (LME Aluminium Rate (USD/ton) x USD-INR Exchange Rate x 45) + (INR Inflation Rate x 0.8) + (Crude Oil Price (USD/barrel) x 0.4) + 12,500
 
 #To run the app:
