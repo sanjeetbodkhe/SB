@@ -114,7 +114,10 @@ def data():
     # Check if user is loggedin
     if 'loggedin' in session:
         # User is loggedin show them the home page
-        return render_template('home/data.html', username=session['username'],title="Data",pred='',df_len=0,model_status='')
+        df_table=get_data.fetch_alu_mcx()
+        df_table_len= len(df_table)
+        df_table=df_table.reset_index(drop=False)
+        return render_template('home/data.html', username=session['username'],title="Data",pred='',df_len=0,model_status='',users=df_table,df_table_len_f=df_table_len)
     # User is not loggedin redirect to login page
     return redirect(url_for('data'))
 

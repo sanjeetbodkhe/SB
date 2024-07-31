@@ -46,4 +46,54 @@
     {% endfor %}
 </table>
 {% endblock %}
+{% block app_context %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1>{{ title }}</h1>
+            <table id="data" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Price</th>
+                        <th>Open</th>
+                        <th>High</th>
+                        <th>Low</th>
+                        <th>Vol</th>
+                        <th>Change</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for x in range(df_table_len_f) %}
+                        <tr>
+                            <td>{{ (users.iloc[x]['Date']) }}</td>
+                            <td>{{ users.iloc[x]['Price'] }}</td>
+                            <td>{{ users.iloc[x]['Open'] }}</td>
+                            <td>{{ users.iloc[x]['High'] }}</td>
+                            <td>{{ users.iloc[x]['Low'] }}</td>
+                            <td>{{ users.iloc[x]['Vol'] }}</td>
+                            <td>{{ users.iloc[x]['Chnge'] }}</td>
+                        </tr>
+                    {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function() {
+            $('#data').DataTable({
+                columns: [
+                    {orderable: true, searchable: true},
+                    {orderable: false, searchable: false},
+                    {orderable: false, searchable: false},
+                    {orderable: false, searchable: false},
+                    {orderable: false, searchable: false},
+                    {orderable: false, searchable: false},
+                    {orderable: false, searchable: false}
+                ],
+            });
+        });
+    </script>
+{% endblock %}
 {% endblock %}
