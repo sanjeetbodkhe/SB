@@ -4,7 +4,7 @@
 
 {% block content %}
 <h2>Add Data </h2>
-<form action="{{ url_for('add')}}" method="post">
+<form action="{{ url_for('add')}}" method="post" class = "add_form">
     <label for="date">Date:</label>
     <input type="date" id="date" name="date">
     <label for="price">Price:</label>
@@ -13,7 +13,6 @@
     <input type="text" id="open" name="open" placeholder="0.0">
     <label for="high">High:</label>
     <input type="text" id="high" name="high" placeholder="0.0">
-    <br>
     <label for="low">Low:</label>
     <input type="text" id="low" name="low" placeholder="0.0">
     <label for="vol">Vol:</label>
