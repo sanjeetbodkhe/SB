@@ -26,7 +26,7 @@ connection = engine.connect()
 
 def alu_mcx_db():
     #Data from https://in.investing.com/commodities/aluminium-mini-historical-data
-    url = open("C:/Users/Home/Desktop/SBSCAFFORM/sites/InvestingcomIndia.html", encoding="utf8")
+    url = open(fr"{os.getenv('BASE_DIR')}/sites/InvestingcomIndia.html", encoding="utf8")
     soup = BeautifulSoup(url, 'html.parser')
     table = soup.find('table', {'class': 'freeze-column-w-1 w-full overflow-x-auto text-xs leading-4'})
     headers = [header.text.strip() for header in table.find_all('th')]
@@ -42,8 +42,8 @@ def alu_mcx_db():
     # Create a DataFrame from the extracted data
     df = pd.DataFrame(data, columns=headers)
     df['Date'] = pd.to_datetime(df.Date,format='%d-%m-%Y')
-    df.rename(columns = {'Change':'Chng'}, inplace = True)
-    df.to_sql(con=connection, name='data1',index=df['Date'],index_label='Date', if_exists='replace')
+    df.rename(columns = {'Change':'Chnge'}, inplace = True)
+    df.to_sql(con=connection, name='alu_mcx_data',index=df['Date'],index_label='Date', if_exists='replace')
     #print(df)
     return df
 #alu_mcx_db()
@@ -53,7 +53,7 @@ def alu_mcx_db():
 
 def lme_alu():
     #Data from https://www.westmetall.com/en/markdaten.php?action=table&field=LME_Al_cash#y2024
-    url = open("C:/Users/Home/Desktop/SBSCAFFORM/sites/LME_ALU.html", encoding="utf8")
+    url = open(fr"{os.getenv('BASE_DIR')}/sites/LME_ALU.html", encoding="utf8")
     soup = BeautifulSoup(url, 'html.parser')
     table = soup.find_all('table')
     headers = [header.text.strip() for header in table[0].find_all('th')]
@@ -81,7 +81,7 @@ def lme_alu():
 
 def usd_inr():
     #Data from https://in.investing.com/currencies/usd-inr-historical-data
-    url = open("C:/Users/Home/Desktop/SBSCAFFORM/sites/USDINRInvestingcomIndia.html", encoding="utf8")
+    url = open(fr"{os.getenv('BASE_DIR')}/sites/USDINRInvestingcomIndia.html", encoding="utf8")
     soup = BeautifulSoup(url, 'html.parser')
     table = soup.find('table', {'class': 'freeze-column-w-1 w-full overflow-x-auto text-xs leading-4'})
     headers = [header.text.strip() for header in table.find_all('th')]
@@ -103,7 +103,7 @@ def usd_inr():
 
 def inflation():
     #Data from https://www.moneycontrol.com/economic-calendar/india-inflation-rate-yoy/5128767
-    url = open("C:/Users/Home/Desktop/SBSCAFFORM/sites/IndiaInflationMoneycontrol.html", encoding="utf8")
+    url = open(fr"{os.getenv('BASE_DIR')}/sites/IndiaInflationMoneycontrol.html", encoding="utf8")
     soup = BeautifulSoup(url, 'html.parser')
     table = soup.find('table', {'id': 'hist_tbl'})
     headers = [header.text.strip() for header in table.find_all('th')]
@@ -158,5 +158,5 @@ def nalco_pred():
     #print(df)
     return df
 
-print(nalco_pred())
-#alu_mcx_db()
+#print(nalco_pred())
+print(alu_mcx_db())

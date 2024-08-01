@@ -13,13 +13,14 @@
     <input type="text" id="open" name="open" placeholder="0.0">
     <label for="high">High:</label>
     <input type="text" id="high" name="high" placeholder="0.0">
+    <br>
     <label for="low">Low:</label>
     <input type="text" id="low" name="low" placeholder="0.0">
     <label for="vol">Vol:</label>
     <input type="text" id="vol" name="vol" placeholder="0.0K">
     <label for="change">Change:</label>
     <input type="text" id="change" name="change" placeholder="0.0%">
-    <input id="add" class="add "type="submit" value="Add">
+    <input id="add" class="add "type="submit" value="Add/Edit">
 </form>
 <h2>Delete Data </h2>
 <form action="{{ url_for('delete')}}" method="post">
@@ -27,25 +28,6 @@
     <input type="date" id="date" name="date">
     <input id="delete" class="delete "type="submit" value="Delete">
 </form>
-<h2>Upload Historical Data </h2>
-<form method = "POST" enctype="multipart/form-data" action = "/uploadFile">    
-    <input type="file" name="file" accept=".csv">
-    <input type="submit" class="upload1" value="Upload">  
-</form>
-{% block tabledata %}
-<table>
-    <tr>
-        <th>Date</th>
-        <th>Predicted Price</th>
-    </tr>
-    {% for x in range(df_len) %}
-    <tr>
-        <td>{{(pred.iloc[x]['Date']).strftime("%d/%m/%y")}}</td>
-        <td>{{pred.iloc[x]['Predicted_Price']}}</td>
-    </tr>
-    {% endfor %}
-</table>
-{% endblock %}
 {% block app_context %}
     <div class="row">
         <div class="col-md-12">
@@ -65,7 +47,7 @@
                 <tbody>
                     {% for x in range(df_table_len_f) %}
                         <tr>
-                            <td>{{ (users.iloc[x]['Date']) }}</td>
+                            <td>{{ (users.iloc[x]['Date']).strftime("%Y-%m-%d") }}</td>
                             <td>{{ users.iloc[x]['Price'] }}</td>
                             <td>{{ users.iloc[x]['Open'] }}</td>
                             <td>{{ users.iloc[x]['High'] }}</td>
@@ -83,6 +65,7 @@
     <script>
         $(document).ready(function() {
             $('#data').DataTable({
+                order : [[0,'desc']],
                 columns: [
                     {orderable: true, searchable: true},
                     {orderable: false, searchable: false},

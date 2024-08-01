@@ -3,40 +3,60 @@
 {% block title %} {{ title }} {% endblock %}
 
 {% block content %}
-<h2>Download Historical Data </h2>
-<a href="/download_csv">
-    <button class="button-1">Download CSV for historical Data</button>
-</a>
-<h2>Upload Historical Data </h2>
-<form method = "POST" enctype="multipart/form-data" action = "/uploadFile">    
-    <input type="file" name="file" accept=".csv">
-    <input type="submit" class="upload1" value="Upload">  
-</form>
-<h2>Get Predictions </h2>
-<form action="{{ url_for('getprediction') }}" method="post" id="form1">
-    <label for="date">Trade Duration:</label>
-    <select id="duration" name="duration">
-        <option value="5">5 days</option>
-        <option value="15">15 days</option>
-        <option value="30">30 days</option>
-    </select>
-    <input id="load" class="load "type="submit" value="Load">
-</form>
-{% block model_status %} {{ model_status }} {% endblock %}
-{% block df_len %}
-{% block pred %}
-<table>
-    <tr>
-        <th>Date</th>
-        <th>Predicted Price</th>
-    </tr>
-    {% for x in range(df_len) %}
-    <tr>
-        <td>{{(pred.iloc[x]['Date']).strftime("%d/%m/%y")}}</td>
-        <td>{{pred.iloc[x]['Predicted_Price']}}</td>
-    </tr>
-    {% endfor %}
-</table>
-{% endblock %}
-{% endblock %}
+    {% block model_train_loading %} 
+        {% if all_models_flag == True: %}
+        <h2>Train Model on newly added Data: </h2>
+        <form method = "POST"  action = "/train_model">
+            <input type="submit" class="upload1" value="Train Model">  
+        </form>
+        {% endif %}
+    {% endblock %}
+    <h2>Get Predictions </h2>
+    <form action="{{ url_for('getprediction') }}" method="post" id="form1">
+        <label for="date">Trade Duration:</label>
+        <select id="duration" name="duration">
+            <option value="5">5 days</option>
+            <option value="15">15 days</option>
+            <option value="30">30 days</option>
+        </select>
+        <input id="load" class="load "type="submit" value="Load">
+    </form>
+    {% block model_status %} {{ model_status }} {% endblock %}
+    {% if df_len != 0: %}
+        {% block app_context %}
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Predictions</h1>
+                    <table id="prediction" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for x in range(df_len) %}
+                                <tr>
+                                    <td>{{ (pred.iloc[x]['Date']).strftime("%Y-%m-%d") }}</td>
+                                    <td>{{ pred.iloc[x]['Predicted_Price'] }}</td>
+                                </tr>
+                            {% endfor %}
+                    </table>
+                </div>
+            </div>
+        {% endblock %}
+        {% block scripts %}
+            <script>
+                $(document).ready(function() {
+                    $('#prediction').DataTable({
+                        order : [[0,'asc']],
+                        columns: [
+                            {orderable: true, searchable: true},
+                            {orderable: false, searchable: false}
+                        ],
+                    });
+                });
+            </script>
+        {% endblock %}
+    {% endif %}
 {% endblock %}

@@ -30,7 +30,7 @@ Nalco IA10 Aluminium Ingot Price (Rs/ton) ≈ (LME Aluminium Rate (USD/ton) x US
 #To run the app:
 
 venv\Scripts\activate
-set FLASK_APP=main.py
+set FLASK_APP=app.py
 set FLASK_DEBUG=1
 set FLASK_ENV=development
 flask run
