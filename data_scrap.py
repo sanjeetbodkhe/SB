@@ -154,9 +154,9 @@ def nalco_pred():
     df['usd_inr_conv'] = df['usd_inr_conv'].map(lambda usd_inr_conv: float(usd_inr_conv))
     df['Inflation'] = df['Inflation'].map(lambda Inflation: float(Inflation.replace("%", "")))
     df['Crude_Price'] = df['Crude_Price'].map(lambda Crude_Price: float(Crude_Price))
-    df = df.assign(Nalco_Pred = round(((df.LME_ALU_PRICE * df.usd_inr_conv * 45) + (df.Inflation * 0.8) + (df.Crude_Price*0.4) + 12500),2))
+    df = df.assign(Nalco_Pred = round(((df.LME_ALU_PRICE * 45 * df.usd_inr_conv) + (df.Inflation * 0.8) + (df.Crude_Price*0.4) + 12500),2))
     #print(df)
     return df
 
-#print(nalco_pred())
-print(alu_mcx_db())
+print(nalco_pred())
+#print(alu_mcx_db())
