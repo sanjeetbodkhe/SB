@@ -176,6 +176,7 @@ def add():
            cursor.execute((f"UPDATE {os.getenv('MYSQL_DB')}.alu_mcx_data SET Price = {price} WHERE date='{date}' "))
            cursor.execute((f"UPDATE {os.getenv('MYSQL_DB')}.alu_mcx_data SET Open={open} WHERE date='{date}' "))
            cursor.execute((f"UPDATE {os.getenv('MYSQL_DB')}.alu_mcx_data SET High={high} WHERE date='{date}' "))
+           cursor.execute((f"UPDATE {os.getenv('MYSQL_DB')}.alu_mcx_data SET High={low} WHERE date='{date}' "))
            cursor.execute((f"UPDATE {os.getenv('MYSQL_DB')}.alu_mcx_data SET Vol='{vol}' WHERE date='{date}' "))
            cursor.execute((f"UPDATE {os.getenv('MYSQL_DB')}.alu_mcx_data SET chnge='{change}' WHERE date='{date}' "))
        mysql.connection.commit()
@@ -199,6 +200,63 @@ def delete():
     df_table=df_table.reset_index(drop=False)
     df_table=df_table.sort_values(by=['Date'], ascending=False)
     return render_template('home/data.html', username=session['username'],title="Data",users=df_table,df_table_len_f=df_table_len)
+
+@app.route('/home/rentals')
+def rentals():
+    # Check if user is loggedin
+    if 'loggedin' in session:
+        # User is loggedin show them the home page
+        df_table=get_data.fetch_rentals()
+        df_table_len= len(df_table)
+        df_table=df_table.reset_index(drop=False)
+        df_table=df_table.sort_values(by=['date'], ascending=False)
+        return render_template('home/rentals.html', username=session['username'],title="Rentals Data",users=df_table,df_table_len_f=df_table_len)
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
+
+@app.route('/rentals_add', methods =["GET", "POST"])
+def rentals_add():
+    if request.method == "POST":
+       date = request.form.get("date")
+       approached = request.form.get("approached")
+       conversion_rate = request.form.get("conversion_rate")
+       tut_size = request.form.get("tut_size")
+       amount = request.form.get("amount")
+       default_payment = request.form.get("default_payment")
+       delay_payment = request.form.get("delay_payment")
+       cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+       cursor.execute(f"SELECT * FROM {os.getenv('MYSQL_DB')}.rentals WHERE date = '{date}'")
+       data = cursor.fetchone()
+       if data == None:
+           cursor.execute(f"INSERT INTO {os.getenv('MYSQL_DB')}.rentals VALUES('{date}',{approached},{conversion_rate},{tut_size},{amount},'{default_payment}','{delay_payment}')")
+       else:
+           cursor.execute((f"UPDATE {os.getenv('MYSQL_DB')}.rentals SET approached = {approached} WHERE date='{date}' "))
+           cursor.execute((f"UPDATE {os.getenv('MYSQL_DB')}.rentals SET conversion_rate={conversion_rate} WHERE date='{date}' "))
+           cursor.execute((f"UPDATE {os.getenv('MYSQL_DB')}.rentals SET tut_size={tut_size} WHERE date='{date}' "))
+           cursor.execute((f"UPDATE {os.getenv('MYSQL_DB')}.rentals SET amount={amount} WHERE date='{date}' "))
+           cursor.execute((f"UPDATE {os.getenv('MYSQL_DB')}.rentals SET default_payment='{default_payment}' WHERE date='{date}' "))
+           cursor.execute((f"UPDATE {os.getenv('MYSQL_DB')}.rentals SET delay_payment='{delay_payment}' WHERE date='{date}' "))
+       mysql.connection.commit()
+    df_table=get_data.fetch_rentals()
+    df_table_len= len(df_table)
+    df_table=df_table.reset_index(drop=False)
+    df_table=df_table.sort_values(by=['date'], ascending=False)
+    return render_template('home/rentals.html', username=session['username'],title="Rentals Data",users=df_table,df_table_len_f=df_table_len)
+    
+@app.route('/rentals_delete', methods =["GET", "POST"])
+def rentals_delete():
+    if request.method == "POST":
+       # getting input with name = fname in HTML form
+       date = request.form.get("date")
+       # getting input with name = lname in HTML form
+       cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+       cursor.execute(f"DELETE FROM {os.getenv('MYSQL_DB')}.rentals WHERE date = '{date}'") 
+       mysql.connection.commit()
+    df_table=get_data.fetch_rentals()
+    df_table_len= len(df_table)
+    df_table=df_table.reset_index(drop=False)
+    df_table=df_table.sort_values(by=['date'], ascending=False)
+    return render_template('home/rentals.html', username=session['username'],title="Rentals Data",users=df_table,df_table_len_f=df_table_len)
 
 if __name__ =='__main__':
     configure()

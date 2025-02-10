@@ -6,25 +6,25 @@
 <h2>Add Data </h2>
 <form action="{{ url_for('add')}}" method="post" class = "add_form">
     <label for="date">Date:</label>
-    <input type="date" id="date" name="date">
+    <input type="date" id="date" name="date" required>
     <label for="price">Price:</label>
-    <input type="text" id="price" name="price" placeholder="0.0">
+    <input type="text" id="price" name="price" placeholder="0.0" required>
     <label for="open">Open:</label>
-    <input type="text" id="open" name="open" placeholder="0.0">
+    <input type="text" id="open" name="open" placeholder="0.0" required>
     <label for="high">High:</label>
-    <input type="text" id="high" name="high" placeholder="0.0">
+    <input type="text" id="high" name="high" placeholder="0.0" required>
     <label for="low">Low:</label>
-    <input type="text" id="low" name="low" placeholder="0.0">
+    <input type="text" id="low" name="low" placeholder="0.0" required>
     <label for="vol">Vol:</label>
-    <input type="text" id="vol" name="vol" placeholder="0.0K">
+    <input type="text" id="vol" name="vol" placeholder="0.0K" required>
     <label for="change">Change:</label>
-    <input type="text" id="change" name="change" placeholder="0.0%">
+    <input type="text" id="change" name="change" placeholder="0.0%" required>
     <input id="add" class="add "type="submit" value="Add/Edit">
 </form>
 <h2>Delete Data </h2>
 <form action="{{ url_for('delete')}}" method="post">
     <label for="date">Date:</label>
-    <input type="date" id="date" name="date">
+    <input type="date" id="date" name="date" required>
     <input id="delete" class="delete "type="submit" value="Delete">
 </form>
 {% block app_context %}

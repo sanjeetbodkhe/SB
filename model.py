@@ -109,7 +109,6 @@ def model_train(data_pass):
         # save the model to disk
         filename = 'finalized_model'+str(day1)+'.sav'
         pickle.dump(regressor, open(filename, 'wb'))
-
         np.mean(np.abs((true_values - predicted_Price) / true_values)) * 100
 
 def get_prediction(day1):

@@ -41,7 +41,7 @@ def alu_mcx_db():
         data.append(cols)
     # Create a DataFrame from the extracted data
     df = pd.DataFrame(data, columns=headers)
-    df['Date'] = pd.to_datetime(df.Date,format='%d-%m-%Y')
+    df['Date'] = pd.to_datetime(df.Date,format='%b %d, %Y')
     df.rename(columns = {'Change':'Chnge'}, inplace = True)
     df.to_sql(con=connection, name='alu_mcx_data',index=df['Date'],index_label='Date', if_exists='replace')
     #print(df)
@@ -158,5 +158,5 @@ def nalco_pred():
     #print(df)
     return df
 
-print(nalco_pred())
-#print(alu_mcx_db())
+#print(nalco_pred())
+print(alu_mcx_db())

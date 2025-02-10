@@ -1,0 +1,81 @@
+{% extends 'home/layout.html' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block content %}
+<h2>Add Data </h2>
+<form action="{{ url_for('rentals_add')}}" method="post" class = "add_form">
+    <label for="date">Date:</label>
+    <input type="date" id="date" name="date" required>
+    <label for="approached">Approached:</label>
+    <input type="text" id="approached" name="approached" placeholder="0.0" required>
+    <label for="conversion_rate">Conversion:</label>
+    <input type="text" id="conversion_rate" name="conversion_rate" placeholder="0.0" required>
+    <label for="tut_size">tut_size:</label>
+    <input type="text" id="tut_size" name="tut_size" placeholder="0.0" required>
+    <label for="amount">Amount:</label>
+    <input type="text" id="amount" name="amount" placeholder="0.0" required>
+    <label for="default_payment">Default:</label>
+    <input type="text" id="default_payment" name="default_payment" placeholder="0.0" required>
+    <label for="delay_payment">Delay:</label>
+    <input type="text" id="delay_payment" name="delay_payment" placeholder="0.0" required>
+    <input id="add" class="add "type="submit" value="Add/Edit">
+</form>
+<h2>Delete Data </h2>
+<form action="{{ url_for('rentals_delete')}}" method="post">
+    <label for="date">Date:</label>
+    <input type="date" id="date" name="date" required>
+    <input id="delete" class="delete "type="submit" value="Delete">
+</form>
+{% block app_context %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1>{{ title }}</h1>
+            <table id="data" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>date</th>
+                        <th>approached</th>
+                        <th>conversion_rate</th>
+                        <th>tut_size</th>
+                        <th>amount</th>
+                        <th>default_payment</th>
+                        <th>delay_payment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for x in range(df_table_len_f) %}
+                        <tr>
+                            <td>{{ (users.iloc[x]['date']).strftime("%Y-%m-%d") }}</td>
+                            <td>{{ users.iloc[x]['approached'] }}</td>
+                            <td>{{ users.iloc[x]['conversion_rate'] }}</td>
+                            <td>{{ users.iloc[x]['tut_size'] }}</td>
+                            <td>{{ users.iloc[x]['amount'] }}</td>
+                            <td>{{ users.iloc[x]['default_payment'] }}</td>
+                            <td>{{ users.iloc[x]['delay_payment'] }}</td>
+                        </tr>
+                    {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function() {
+            $('#data').DataTable({
+                order : [[0,'desc']],
+                columns: [
+                    {orderable: true, searchable: true},
+                    {orderable: false, searchable: false},
+                    {orderable: false, searchable: false},
+                    {orderable: false, searchable: false},
+                    {orderable: false, searchable: false},
+                    {orderable: false, searchable: false},
+                    {orderable: false, searchable: false}
+                ],
+            });
+        });
+    </script>
+{% endblock %}
+{% endblock %}
